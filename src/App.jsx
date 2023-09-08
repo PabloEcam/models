@@ -16,7 +16,7 @@ function App() {
     Jarron: <Model1 />,
     Mesa: <Model2 />,
     Room: <Model3 />,
-  }; 
+  };
 
   // Función para generar una posición en una cuadrícula con separación de 10 en x y z
   const getPosition = (index) => {
@@ -27,28 +27,32 @@ function App() {
     return [x, 0, z];
   };
 
-  return (
-    <Canvas>
-      <Perf position="top-left" />
-      <OrbitControls makeDefault />
-      <Stage intensity={5}>
-        {model === 'Room' &&
-          Array.from({ length: count }).map((_, index) => (
-            <Model3 key={index} position={getPosition(index)} />
-          ))}
 
-        {model === 'Jarron' &&
-          Array.from({ length: count }).map((_, index) => (
-            <Model1 key={index} position={getPosition(index)} />
-          ))}
+  const renderModels = () => {
+    return Array.from({ length: count }).map((_, index) => {
+      switch (model) {
+        case 'Jarron':
+          return <Model1 key={index} position={getPosition(index)} />;
+        case 'Mesa':
+          return <Model2 key={index} position={getPosition(index)} />;
+        case 'Room':
+          return <Model3 key={index} position={getPosition(index)} />;
+        default:
+          return null;
+      }
+    });
+  }
+  
 
-        {model === 'Mesa' &&
-          Array.from({ length: count }).map((_, index) => (
-            <Model2 key={index} position={getPosition(index)} />
-          ))}
-      </Stage>
-    </Canvas>
-  );
+return (
+  <Canvas>
+    <Perf position="top-left" />
+    <OrbitControls makeDefault />
+    <Stage intensity={5}>
+      {renderModels()}
+    </Stage>
+  </Canvas>
+);
 }
 
 export default App;
