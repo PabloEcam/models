@@ -1,10 +1,15 @@
+import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { Stage, OrbitControls } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 import { useControls } from 'leva'
 import { Perf } from 'r3f-perf'
+import Loader from './components/Loader.jsx'
+import Lights from './components/Lights.jsx'
 import Model1 from './components/models/JarronBlender.jsx'
 import Model2 from './components/models/MesaBlender.jsx'
 import Model3 from './components/models/DioramaBlenderTextures.jsx'
+import Model4 from './components/models/Room-03.jsx'
+
 
 function App() {
   const { model, count } = useControls({
@@ -16,6 +21,7 @@ function App() {
     Jarron: <Model1 />,
     Mesa: <Model2 />,
     Room: <Model3 />,
+    Room3: <Model4 />,
   };
 
   // Función para generar una posición en una cuadrícula con separación de 10 en x y z
@@ -44,15 +50,18 @@ function App() {
   }
   
 
-return (
-  <Canvas>
-    <Perf position="top-left" />
-    <OrbitControls makeDefault />
-    <Stage intensity={5}>
-      {renderModels()}
-    </Stage>
-  </Canvas>
-);
+  return (
+      <Canvas >
+        <Lights />
+        <Perf position="top-left" />
+        <OrbitControls makeDefault/> 
+        <Suspense fallback={<Loader />}>
+          {/* <Stage intensity={5} environment="forest" shadows="contact"> */}
+            {selectedModel}   
+          {/* </Stage> */}
+        </Suspense>
+    </Canvas>
+  ) 
 }
 
 export default App;
